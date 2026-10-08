@@ -13,11 +13,10 @@ Este repositorio contiene la solución completa de la actividad práctica: **Des
 ## 📋 Tabla de Contenidos
 1. [Descripción de la Actividad](#-descripción-de-la-actividad)
 2. [Cumplimiento de Requisitos](#-cumplimiento-de-requisitos)
-3. [Arquitectura y Patrón MVC](#-arquitectura-y-patrón-mvc)
-4. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-5. [Estructura del Proyecto](#-estructura-del-proyecto)
-6. [Endpoints de la API](#-endpoints-de-la-api)
-7. [Puesta en Marcha](#-puesta-en-marcha)
+3. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+4. [Estructura del Proyecto](#-estructura-del-proyecto)
+5. [Endpoints de la API](#-endpoints-de-la-api)
+6. [Puesta en Marcha](#-puesta-en-marcha)
    * [Opción A: Despliegue con Docker Compose (Recomendado)](#opción-a-despliegue-con-docker-compose-recomendado)
    * [Opción B: Ejecución Local en Desarrollo](#opción-b-ejecución-local-en-desarrollo)
 
@@ -43,47 +42,6 @@ El objetivo de la actividad consiste en diseñar e implementar una aplicación w
 | **Autenticación (Login & Register)** | Cumplido | Módulo de autenticación con emisión de JSON Web Tokens (JWT), validación de credenciales y persistencia de sesión. |
 | **URLs y Rutas Protegidas** | Cumplido | **Backend**: `JwtAuthGuard` activo en todos los endpoints de `/api/v1/products`.<br>**Frontend**: `AuthGuard` funcional (`canActivate`) que intercepta la navegación a `/products` y redirige a `/login`. |
 | **Encriptación de Contraseñas** | Cumplido | Cifrado con `bcrypt` y factor de costo (salt rounds = 10) antes de almacenar contraseñas en PostgreSQL. Ninguna contraseña se guarda en texto plano. |
-
----
-
-## 🏗 Arquitectura y Patrón MVC
-
-La solución aplica el patrón **Model-View-Controller (MVC)** de forma moderna y limpia dividida entre el ecosistema servidor y cliente:
-
-```mermaid
-flowchart LR
-    subgraph Client["Frontend (Angular 22 SPA)"]
-        V["VIEW (Templates HTML + CSS)"]
-        C_FE["CONTROLLER (Signals, FormGroups, AuthGuard)"]
-        M_FE["MODEL (Types, DTOs, HTTP Service)"]
-        V <--> C_FE
-        C_FE <--> M_FE
-    end
-
-    subgraph Server["Backend (NestJS API REST)"]
-        C_BE["CONTROLLER (AuthController, ProductsController)"]
-        S_BE["SERVICE (AuthService, ProductsService)"]
-        M_BE["MODEL (TypeORM Entities: User, Product)"]
-        C_BE <--> S_BE
-        S_BE <--> M_BE
-    end
-
-    subgraph Storage["Base de Datos"]
-        DB[("PostgreSQL 17")]
-        M_BE <--> DB
-    end
-
-    M_FE -- "Peticiones HTTP con Bearer Token" --> C_BE
-```
-
-* **Modelo (Model)**:
-  * **Backend**: Entidades TypeORM (`User`, `Product`) mapeadas contra tablas de PostgreSQL, con decoradores `class-validator` en los DTOs para garantizar integridad de datos.
-  * **Frontend**: Interfaces y tipos estrictos de TypeScript (`auth.types.ts`, `products.types.ts`).
-* **Controlador (Controller)**:
-  * **Backend**: `AuthController` gestiona las rutas de registro y login; `ProductsController` procesa las peticiones de creación, listado paginado, búsqueda, actualización y borrado.
-  * **Frontend**: Clases de componentes que orquestan el estado mediante **Angular Signals** (`signal()`, `computed()`), reaccionan a eventos de usuario y administran el flujo de navegación.
-* **Vista (View)**:
-  * Componentes Standalone de Angular con templates HTML semánticos y estilos CSS encapsulados, sin dependencias de librerías CSS pesadas, con soporte responsive (Flexbox / CSS Grid).
 
 ---
 
