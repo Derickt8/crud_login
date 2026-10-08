@@ -13,15 +13,14 @@ Este repositorio contiene la solución completa de la actividad práctica: **Des
 ## 📋 Tabla de Contenidos
 1. [Descripción de la Actividad](#-descripción-de-la-actividad)
 2. [Cumplimiento de Requisitos](#-cumplimiento-de-requisitos)
-3. [Demostración en Video](#-demostración-en-video-máx-3-minutos)
-4. [Arquitectura y Patrón MVC](#-arquitectura-y-patrón-mvc)
-5. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-6. [Estructura del Proyecto](#-estructura-del-proyecto)
-7. [Endpoints de la API](#-endpoints-de-la-api)
-8. [Puesta en Marcha](#-puesta-en-marcha)
+3. [Arquitectura y Patrón MVC](#-arquitectura-y-patrón-mvc)
+4. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+5. [Estructura del Proyecto](#-estructura-del-proyecto)
+6. [Endpoints de la API](#-endpoints-de-la-api)
+7. [Puesta en Marcha](#-puesta-en-marcha)
    * [Opción A: Despliegue con Docker Compose (Recomendado)](#opción-a-despliegue-con-docker-compose-recomendado)
    * [Opción B: Ejecución Local en Desarrollo](#opción-b-ejecución-local-en-desarrollo)
-9. [Credenciales de Prueba](#-credenciales-de-prueba)
+8. [Credenciales de Prueba](#-credenciales-de-prueba)
 
 ---
 
@@ -33,7 +32,6 @@ El objetivo de la actividad consiste en diseñar e implementar una aplicación w
 * **Sistema de Autenticación (Login y Registro)**: Acceso restringido mediante usuario y contraseña a las secciones privadas del sistema.
 * **Protección Estricta de URLs**: Impedir cualquier intento de acceso directo a rutas o endpoints protegidos si el usuario no ha iniciado sesión previamente.
 * **Seguridad y Encriptación**: Almacenamiento seguro de contraseñas mediante algoritmos de cifrado unidireccional con salting (**Bcrypt**).
-* **Entrega en Video**: Grabación demostrativa breve (máximo 3 minutos) en **Loom** o **YouTube** validando todos los flujos solicitados.
 
 ---
 
@@ -46,37 +44,6 @@ El objetivo de la actividad consiste en diseñar e implementar una aplicación w
 | **Autenticación (Login & Register)** | Cumplido | Módulo de autenticación con emisión de JSON Web Tokens (JWT), validación de credenciales y persistencia de sesión. |
 | **URLs y Rutas Protegidas** | Cumplido | **Backend**: `JwtAuthGuard` activo en todos los endpoints de `/api/v1/products`.<br>**Frontend**: `AuthGuard` funcional (`canActivate`) que intercepta la navegación a `/products` y redirige a `/login`. |
 | **Encriptación de Contraseñas** | Cumplido | Cifrado con `bcrypt` y factor de costo (salt rounds = 10) antes de almacenar contraseñas en PostgreSQL. Ninguna contraseña se guarda en texto plano. |
-| **Video Demostrativo (Máx. 3 min)** | Preparado | Guion estructurado y sección dedicada para incluir el enlace de Loom o YouTube. |
-
----
-
-## 🎥 Demostración en Video (Máx. 3 minutos)
-
-> 🔗 **Enlace al video de la demostración**:  
-> **[Ver Video Demostrativo en Loom / YouTube](https://www.loom.com/)** *(Reemplazar con el enlace de grabación final)*
-
-### Guion de Verificación Paso a Paso Grabado:
-
-1. **Intento de Acceso a Ruta Protegida sin Autenticación**:
-   * En modo incógnito, se navega directamente a `http://localhost:4200/products`.
-   * El `AuthGuard` intercepta la petición, verifica la ausencia de token y redirige de inmediato a `http://localhost:4200/login`.
-2. **Registro de un Nuevo Usuario**:
-   * Acceso a la vista de registro (`/register`).
-   * Creación de cuenta indicando nombre, correo electrónico y contraseña (demostrando la validación del formulario).
-3. **Inicio de Sesión (Login) y Validación Criptográfica**:
-   * Ingreso de credenciales en `/login`.
-   * Verificación del hash con `bcrypt` en backend y recepción del Bearer Token JWT.
-   * Redirección exitosa hacia la vista privada protegida `/products`.
-4. **Demostración de las 4 Operaciones CRUD**:
-   * **Crear (Create)**: Apertura del modal *"Nuevo Producto"*, ingreso de datos (código, nombre, categoría, precio, stock, descripción) y guardado en tiempo real.
-   * **Leer (Read)**: Visualización de la tabla de productos, filtro de búsqueda por texto y paginación.
-   * **Actualizar (Update)**: Modificación de campos (precio, nombre, stock) mediante el modal de edición.
-   * **Cambiar Estado**: Alternancia entre estado *Activo* e *Inactivo* mediante modal de confirmación.
-   * **Eliminar (Delete)**: Eliminación física de un producto con modal de advertencia y actualización del listado.
-5. **Cierre de Sesión (Logout) y Bloqueo de Historial**:
-   * Clic en el botón *"Cerrar Sesión"*.
-   * Limpieza del token en el cliente y redirección a `/login`.
-   * Intento de volver a la vista protegida con el botón "Atrás" del navegador; el sistema bloquea el acceso inmediatamente.
 
 ---
 
