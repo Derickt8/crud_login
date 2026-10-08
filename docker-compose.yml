@@ -1,0 +1,58 @@
+services:
+  postgres_db:
+    image: postgres:17-alpine
+    container_name: crud_login_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: crud_login_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - crud_postgres_data:/var/lib/postgresql/data
+    networks:
+      - crud_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crud_login_backend
+    restart: always
+    environment:
+      PORT: 3000
+      DB_HOST: postgres_db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: admin
+      DB_DATABASE: crud_login_db
+      JWT_SECRET: super-secret-jwt-key-2026-crud-login
+      JWT_EXPIRES_IN: 24h
+      CORS_ORIGIN: http://localhost:4200
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres_db
+    networks:
+      - crud_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: crud_login_frontend
+    restart: always
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    networks:
+      - crud_network
+
+volumes:
+  crud_postgres_data:
+
+networks:
+  crud_network:
+    driver: bridge

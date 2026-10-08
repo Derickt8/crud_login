@@ -1,0 +1,265 @@
+<div class="app-layout">
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <span class="material-icons-outlined brand-icon">inventory_2</span>
+        <div>
+          <span class="brand-title">Catálogo MVC</span>
+          <span class="brand-tag">Área Protegida</span>
+        </div>
+      </div>
+
+      <div class="navbar-user">
+        <div class="user-info">
+          <span class="user-avatar material-icons-outlined">account_circle</span>
+          <div class="user-details">
+            <span class="user-name">{{ currentUser()?.name || 'Usuario' }}</span>
+            <span class="user-email">{{ currentUser()?.email }}</span>
+          </div>
+        </div>
+        <button type="button" class="btn-logout" (click)="logout()" title="Cerrar Sesión">
+          <span class="material-icons-outlined">logout</span>
+          <span class="logout-text">Cerrar Sesión</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="content-container">
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-blue">
+            <span class="material-icons-outlined">inventory</span>
+          </div>
+          <div>
+            <span class="kpi-label">Total Productos</span>
+            <h3 class="kpi-value">{{ totalRecordsProduct() }}</h3>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-green">
+            <span class="material-icons-outlined">check_circle</span>
+          </div>
+          <div>
+            <span class="kpi-label">Productos Activos</span>
+            <h3 class="kpi-value">{{ activeProductsCount() }}</h3>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box bg-amber">
+            <span class="material-icons-outlined">monetization_on</span>
+          </div>
+          <div>
+            <span class="kpi-label">Valor en Inventario</span>
+            <h3 class="kpi-value">${{ totalInventoryValue() | number:'1.2-2' }}</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar-card">
+        <div class="search-box">
+          <span class="material-icons-outlined search-icon">search</span>
+          <input
+            type="text"
+            [formControl]="searchControl"
+            class="search-input"
+            placeholder="Buscar por código, nombre o descripción..."
+          />
+          @if (searchControl.value) {
+            <button type="button" class="btn-clear-search" (click)="searchControl.setValue('')">
+              <span class="material-icons-outlined">close</span>
+            </button>
+          }
+        </div>
+
+        <div class="toolbar-actions">
+          <div class="filter-group">
+            <button
+              type="button"
+              class="filter-pill"
+              [class.active]="selectedStatusProduct() === null"
+              (click)="onFilterStatusAll()"
+            >
+              Todos
+            </button>
+            <button
+              type="button"
+              class="filter-pill"
+              [class.active]="selectedStatusProduct() === 'ACTIVE'"
+              (click)="onFilterStatusActive()"
+            >
+              Activos
+            </button>
+            <button
+              type="button"
+              class="filter-pill"
+              [class.active]="selectedStatusProduct() === 'INACTIVE'"
+              (click)="onFilterStatusInactive()"
+            >
+              Inactivos
+            </button>
+          </div>
+
+          <button type="button" class="btn-create" (click)="openCreateProductModal()">
+            <span class="material-icons-outlined">add</span>
+            <span>Nuevo Producto</span>
+          </button>
+        </div>
+      </section>
+
+      @if (errorMessageProduct()) {
+        <div class="alert-banner-error" role="alert">
+          <span class="material-icons-outlined">error_outline</span>
+          <span>{{ errorMessageProduct() }}</span>
+        </div>
+      }
+
+      <section class="table-card">
+        @if (isLoadingProduct()) {
+          <div class="table-loader-overlay">
+            <div class="spinner-large"></div>
+            <span>Cargando productos...</span>
+          </div>
+        }
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-num">#</th>
+                <th class="col-code">Código</th>
+                <th class="col-name">Nombre / Descripción</th>
+                <th class="col-price">Precio</th>
+                <th class="col-stock">Stock</th>
+                <th class="col-status">Estado</th>
+                <th class="col-date">Fecha Registro</th>
+                <th class="col-actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of productsRows(); track row.id) {
+                <tr class="table-row">
+                  <td class="col-num font-mono">{{ row.recordNumber }}</td>
+                  <td class="col-code">
+                    <span class="sku-badge">{{ row.code }}</span>
+                  </td>
+                  <td class="col-name">
+                    <span class="product-name">{{ row.name }}</span>
+                    @if (row.description) {
+                      <span class="product-desc">{{ row.description }}</span>
+                    }
+                  </td>
+                  <td class="col-price font-mono font-semibold">
+                    ${{ row.price | number:'1.2-2' }}
+                  </td>
+                  <td class="col-stock font-mono">
+                    <span class="stock-pill" [class.stock-low]="row.stock <= 5">
+                      {{ row.stock }} unid.
+                    </span>
+                  </td>
+                  <td class="col-status">
+                    <button
+                      type="button"
+                      class="status-toggle-badge"
+                      [class.badge-active]="row.status === 'ACTIVE'"
+                      [class.badge-inactive]="row.status === 'INACTIVE'"
+                      (click)="openChangeStatusModal(row)"
+                      title="Haz clic para alternar estado"
+                    >
+                      <span class="status-dot"></span>
+                      <span>{{ row.status === 'ACTIVE' ? 'Activo' : 'Inactivo' }}</span>
+                    </button>
+                  </td>
+                  <td class="col-date text-muted">
+                    {{ row.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+                  <td class="col-actions">
+                    <div class="action-buttons">
+                      <button
+                        type="button"
+                        class="btn-action btn-edit"
+                        (click)="openEditProductModal(row)"
+                        title="Editar producto"
+                      >
+                        <span class="material-icons-outlined">edit</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-action btn-status"
+                        (click)="openChangeStatusModal(row)"
+                        title="Cambiar estado"
+                      >
+                        <span class="material-icons-outlined">sync_alt</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-action btn-delete"
+                        (click)="deleteProduct(row)"
+                        title="Eliminar producto"
+                      >
+                        <span class="material-icons-outlined">delete_outline</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                @if (!isLoadingProduct()) {
+                  <tr>
+                    <td colspan="8" class="empty-state-cell">
+                      <div class="empty-state">
+                        <span class="material-icons-outlined empty-icon">inventory_2</span>
+                        <h4 class="empty-title">No se encontraron productos</h4>
+                        <p class="empty-subtitle">
+                          @if (searchQueryProduct() || selectedStatusProduct()) {
+                            No hay registros que coincidan con los filtros aplicados.
+                          } @else {
+                            Comienza creando tu primer producto con el botón superior.
+                          }
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="table-footer">
+          <div class="pagination-info">
+            Mostrando <strong>{{ products().length }}</strong> de <strong>{{ totalRecordsProduct() }}</strong> productos
+          </div>
+
+          <div class="pagination-controls">
+            <button
+              type="button"
+              class="btn-page"
+              [disabled]="pageIndexProduct() <= 1 || isLoadingProduct()"
+              (click)="onPageChange(pageIndexProduct() - 1)"
+            >
+              <span class="material-icons-outlined">chevron_left</span>
+              <span>Anterior</span>
+            </button>
+
+            <span class="page-indicator">
+              Página <strong>{{ pageIndexProduct() }}</strong> de <strong>{{ totalPagesProduct() }}</strong>
+            </span>
+
+            <button
+              type="button"
+              class="btn-page"
+              [disabled]="pageIndexProduct() >= totalPagesProduct() || isLoadingProduct()"
+              (click)="onPageChange(pageIndexProduct() + 1)"
+            >
+              <span>Siguiente</span>
+              <span class="material-icons-outlined">chevron_right</span>
+            </button>
+          </div>
+        </footer>
+      </section>
+    </div>
+  </main>
+</div>

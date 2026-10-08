@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend NestJS API REST con TypeORM, PostgreSQL y JWT Auth",
+  "scripts": {
+    "build": "nest build",
+    "prestart:dev": "node scripts/ensure-db.js",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "db:start": "\"C:\\Program Files\\PostgreSQL\\18\\bin\\pg_ctl.exe\" -D \"./postgres-data\" -l \"./postgres.log\" start",
+    "db:stop": "\"C:\\Program Files\\PostgreSQL\\18\\bin\\pg_ctl.exe\" -D \"./postgres-data\" stop"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.7",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^22.10.1",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/pg": "^8.11.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}

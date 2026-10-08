@@ -1,0 +1,45 @@
+<div class="status-modal-container">
+  <div class="status-modal-icon-wrapper" [class.is-deactivating]="isCurrentlyActive">
+    <span class="material-icons-outlined">
+      {{ isCurrentlyActive ? 'toggle_off' : 'toggle_on' }}
+    </span>
+  </div>
+
+  <h2 class="status-modal-title">
+    {{ isCurrentlyActive ? '¿Desactivar Producto?' : '¿Activar Producto?' }}
+  </h2>
+
+  <p class="status-modal-description">
+    Estás a punto de cambiar el estado de <strong>{{ data.product.name }}</strong> ({{ data.product.code }}) a
+    <span class="badge" [class.badge-inactive]="isCurrentlyActive" [class.badge-active]="!isCurrentlyActive">
+      {{ isCurrentlyActive ? 'INACTIVO' : 'ACTIVO' }}
+    </span>.
+  </p>
+
+  @if (errorMessageStatus()) {
+    <div class="status-alert-error" role="alert">
+      <span class="material-icons-outlined">error_outline</span>
+      <span>{{ errorMessageStatus() }}</span>
+    </div>
+  }
+
+  <div class="status-modal-actions">
+    <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="isSubmittingStatus()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn-confirm"
+      [class.btn-confirm-deactivate]="isCurrentlyActive"
+      [disabled]="isSubmittingStatus()"
+      (click)="confirmStatusChange()"
+    >
+      @if (isSubmittingStatus()) {
+        <span class="spinner-border" aria-hidden="true"></span>
+        <span>Procesando...</span>
+      } @else {
+        <span>{{ isCurrentlyActive ? 'Sí, desactivar' : 'Sí, activar' }}</span>
+      }
+    </button>
+  </div>
+</div>

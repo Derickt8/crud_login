@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Production builds
+dist/
+**/dist/
+.angular/
+**/.angular/
+
+# Environment files
+.env
+.env*
+**/.env
+**/.env*
+
+# Logs and DB data
+*.log
+**/*.log
+postgres-data/
+**/postgres-data/
+postgres.log
+**/postgres.log
+
+# IDE & OS files
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

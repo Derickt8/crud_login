@@ -1,0 +1,12 @@
+{
+  "name": "crud-login-mvc",
+  "version": "1.0.0",
+  "description": "Aplicación MVC de CRUD y Login con NestJS y Angular",
+  "scripts": {
+    "start:backend": "cd backend && npm run start:dev",
+    "start:frontend": "cd frontend && npm start",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend"
+  }
+}

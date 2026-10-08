@@ -1,0 +1,120 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <div class="modal-header-info">
+      <div class="modal-icon-badge">
+        <span class="material-icons-outlined">edit_note</span>
+      </div>
+      <div>
+        <h2 class="modal-title">Editar Producto</h2>
+        <p class="modal-subtitle">Modifica los detalles del producto seleccionado</p>
+      </div>
+    </div>
+    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Cerrar modal">
+      <span class="material-icons-outlined">close</span>
+    </button>
+  </div>
+
+  @if (errorMessageProduct()) {
+    <div class="modal-alert-error" role="alert">
+      <span class="material-icons-outlined alert-icon">error_outline</span>
+      <span>{{ errorMessageProduct() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="editProductForm" (ngSubmit)="onSubmitProduct()" class="modal-form" novalidate>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="edit-code" class="form-label">Código / SKU *</label>
+        <input
+          id="edit-code"
+          type="text"
+          formControlName="code"
+          class="form-control"
+          [class.is-invalid]="editProductForm.get('code')?.invalid && editProductForm.get('code')?.touched"
+        />
+        @if (editProductForm.get('code')?.invalid && editProductForm.get('code')?.touched) {
+          <span class="form-error">El código es obligatorio.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="edit-name" class="form-label">Nombre del Producto *</label>
+        <input
+          id="edit-name"
+          type="text"
+          formControlName="name"
+          class="form-control"
+          [class.is-invalid]="editProductForm.get('name')?.invalid && editProductForm.get('name')?.touched"
+        />
+        @if (editProductForm.get('name')?.invalid && editProductForm.get('name')?.touched) {
+          <span class="form-error">El nombre es obligatorio.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="edit-price" class="form-label">Precio ($) *</label>
+        <input
+          id="edit-price"
+          type="number"
+          step="0.01"
+          min="0"
+          formControlName="price"
+          class="form-control"
+          [class.is-invalid]="editProductForm.get('price')?.invalid && editProductForm.get('price')?.touched"
+        />
+        @if (editProductForm.get('price')?.invalid && editProductForm.get('price')?.touched) {
+          <span class="form-error">Ingresa un precio válido mayor o igual a 0.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="edit-stock" class="form-label">Stock *</label>
+        <input
+          id="edit-stock"
+          type="number"
+          step="1"
+          min="0"
+          formControlName="stock"
+          class="form-control"
+          [class.is-invalid]="editProductForm.get('stock')?.invalid && editProductForm.get('stock')?.touched"
+        />
+        @if (editProductForm.get('stock')?.invalid && editProductForm.get('stock')?.touched) {
+          <span class="form-error">Ingresa una cantidad entera mayor o igual a 0.</span>
+        }
+      </div>
+
+      <div class="form-group full-width">
+        <label for="edit-desc" class="form-label">Descripción</label>
+        <textarea
+          id="edit-desc"
+          rows="3"
+          formControlName="description"
+          class="form-control textarea"
+        ></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="edit-status" class="form-label">Estado *</label>
+        <select id="edit-status" formControlName="status" class="form-control select-input">
+          <option value="ACTIVE">Activo</option>
+          <option value="INACTIVE">Inactivo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" (click)="closeModal()" [disabled]="isSubmittingProduct()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="isSubmittingProduct() || editProductForm.invalid">
+        @if (isSubmittingProduct()) {
+          <span class="spinner-border" aria-hidden="true"></span>
+          <span>Actualizando...</span>
+        } @else {
+          <span class="material-icons-outlined">check_circle</span>
+          <span>Actualizar Cambios</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

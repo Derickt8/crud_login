@@ -1,0 +1,102 @@
+<div class="auth-viewport">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon-badge">
+        <span class="material-icons-outlined">lock</span>
+      </div>
+      <h1 class="auth-title">Iniciar Sesión</h1>
+      <p class="auth-subtitle">Ingresa tus credenciales para acceder al sistema protegido</p>
+    </div>
+
+    @if (errorMessageLogin()) {
+      <div class="auth-alert-error" role="alert">
+        <span class="material-icons-outlined alert-icon">error_outline</span>
+        <span class="alert-text">{{ errorMessageLogin() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()" class="auth-form" novalidate>
+      <div class="form-group">
+        <label for="login-email" class="form-label">Correo Electrónico</label>
+        <div class="input-wrapper">
+          <span class="material-icons-outlined input-icon">email</span>
+          <input
+            id="login-email"
+            type="email"
+            formControlName="email"
+            class="form-control"
+            placeholder="ejemplo@correo.com"
+            autocomplete="email"
+            [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          />
+        </div>
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <span class="form-error">
+            @if (loginForm.get('email')?.hasError('required')) {
+              El correo electrónico es obligatorio.
+            } @else if (loginForm.get('email')?.hasError('email')) {
+              Ingresa un correo electrónico válido.
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="login-password" class="form-label">Contraseña</label>
+        <div class="input-wrapper">
+          <span class="material-icons-outlined input-icon">lock</span>
+          <input
+            id="login-password"
+            [type]="isPasswordVisibleLogin() ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          <button
+            type="button"
+            class="btn-toggle-password"
+            (click)="togglePasswordVisibilityLogin()"
+            tabindex="-1"
+            aria-label="Alternar visibilidad de contraseña"
+          >
+            <span class="material-icons-outlined">
+              {{ isPasswordVisibleLogin() ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <span class="form-error">
+            @if (loginForm.get('password')?.hasError('required')) {
+              La contraseña es obligatoria.
+            } @else if (loginForm.get('password')?.hasError('minlength')) {
+              La contraseña debe tener al menos 6 caracteres.
+            }
+          </span>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="isLoadingLogin() || loginForm.invalid"
+      >
+        @if (isLoadingLogin()) {
+          <span class="spinner-border" aria-hidden="true"></span>
+          <span>Iniciando sesión...</span>
+        } @else {
+          <span class="material-icons-outlined">login</span>
+          <span>Acceder al Sistema</span>
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p class="footer-text">
+        ¿No tienes una cuenta?
+        <a routerLink="/register" class="footer-link">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
+</div>
