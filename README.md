@@ -20,7 +20,6 @@ Este repositorio contiene la solución completa de la actividad práctica: **Des
 7. [Puesta en Marcha](#-puesta-en-marcha)
    * [Opción A: Despliegue con Docker Compose (Recomendado)](#opción-a-despliegue-con-docker-compose-recomendado)
    * [Opción B: Ejecución Local en Desarrollo](#opción-b-ejecución-local-en-desarrollo)
-8. [Credenciales de Prueba](#-credenciales-de-prueba)
 
 ---
 
@@ -102,14 +101,12 @@ flowchart LR
 ### Frontend
 * **Angular 22 (Standalone Components)**: Arquitectura moderna sin `NgModule`.
 * **Angular Signals**: Reactividad declarativa de alto rendimiento (`signal`, `computed`).
-* **Angular Router & CanActivate Functional Guards**: Protección de navegación cliente.
 * **HTTP Interceptors**: Adjunto automático del token `Bearer` en peticiones salientes.
 * **CSS Nativo Modular**: Diseño responsive personalizado con variables CSS, Grid y Flexbox.
 
 ### DevOps y Contenedores
 * **Docker & Dockerfile**: Imágenes multi-stage optimizadas para backend y frontend.
 * **Docker Compose**: Orquestación de servicios en red unificada (`postgres_db`, `backend`, `frontend`).
-* **Nginx**: Servidor web ligero para servir los archivos estáticos de la SPA Angular en producción.
 
 ---
 
@@ -246,17 +243,7 @@ Abre tu navegador en [http://localhost:4200](http://localhost:4200).
 
 ---
 
-## 🔑 Credenciales de Prueba
-
-Para agilizar la evaluación de la actividad, puedes registrar un nuevo usuario desde la interfaz o utilizar la cuenta predeterminada:
-
-* **Correo Electrónico**: `admin@demo.com`
-* **Contraseña**: `Admin123!`
-* **Estado**: `Activo`
-
----
-
 ## 👨‍💻 Autor
 * **Estudiante**: Derick Tipan
-* **Carrera / Especialidad**: Desarrollo de Software / Arquitectura Web
+* **Carrera / Especialidad**: Desarrollo de Software
 * **Materia / Actividad**: Aplicación CRUD y Login con Patrón MVC
